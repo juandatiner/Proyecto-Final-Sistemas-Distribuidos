@@ -1,0 +1,10 @@
+2026-04-09T13:44:32 | INFO     | CAM-C5               | [Publicado] vol= 24 veh | vel= 13.4 km/h | semáforo=ROJO
+2026-04-09T13:44:37 | INFO     | CAM-C5               | [Publicado] vol=  5 veh | vel= 43.5 km/h | semáforo=VERDE
+2026-04-09T13:44:42 | INFO     | CAM-C5               | [Publicado] vol=  0 veh | vel= 47.6 km/h | semáforo=VERDE
+2026-04-09T13:44:47 | INFO     | CAM-C5               | [Publicado] vol=  0 veh | vel= 33.7 km/h | semáforo=VERDE
+2026-04-09T13:44:52 | INFO     | CAM-C5               | [Publicado] vol=  5 veh | vel= 40.2 km/h | semáforo=VERDE
+2026-04-09T13:44:57 | INFO     | CAM-C5               | [Publicado] vol=  2 veh | vel= 39.5 km/h | semáforo=VERDE
+2026-04-09T13:45:02 | INFO     | CAM-C5               | [Publicado] vol=  7 veh | vel= 39.8 km/h | semáforo=VERDE
+2026-04-09T13:45:07 | INFO     | CAM-C5               | [Publicado] vol= 19 veh | vel= 20.0 km/h | semáforo=ROJO
+2026-04-09T13:45:12 | INFO     | CAM-C5               | [Publicado] vol= 16 veh | vel= 25.9 km/h | semáforo=ROJO
+2026-04-09T13:45:17 | INFO     | CAM-C5               | [Publicado] vol= 19 veh | vel= 19.2 km/h | semáforo=ROJO

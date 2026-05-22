@@ -1,0 +1,9 @@
+Variable 2 con BROKER MULTIHILO — Tiempo respuesta Usuario→Semáforo
+
+Test 1: 2.78 ms
+Test 2: 1.84 ms
+Test 3: 1.86 ms
+
+Promedio: 2.16 ms
+Min: 1.84
+Max: 2.78

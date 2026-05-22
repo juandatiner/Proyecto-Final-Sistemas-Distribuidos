@@ -1,0 +1,25 @@
+================================================================
+PT-01: Falla del PC3 — detección automática (CRONOMETRADO)
+================================================================
+
+Procedimiento:
+  1. SIGKILL al proceso base_datos_principal.py en PC3
+  2. Cronometrar tiempo hasta que la analítica de PC2 detecte el fallo
+     (timeout heartbeat = 9s en config)
+  3. Reiniciar BD principal y cronometrar la recuperación
+
+RESULTADOS:
+  Tiempo de detección de fallo:        9.12 s
+  Tiempo de detección de recuperación: 3.32 s
+
+CRITERIO DE ÉXITO (informe sección 5.2):
+  PT-01 (det. < 10s):       CUMPLE
+  PT-03 (recuperación):     CUMPLE
+
+CRONOLOGÍA COMPLETA:
+[t=  0.000s] Inicio PT-01 cronometrado
+[t=  2.324s] Líneas previas analitica.log: 1854
+[t=  2.360s] KILL PIDs: ['1872287', '1872291', '1872292']
+[t= 11.477s] DETECTADO: 2026-04-09T15:02:08 | WARNING  | Analitica            | ⚠️  PC3 no responde desde hace 10.2s (timeout=9s) — usando répli
+[t= 15.479s] Reiniciando base_datos_principal.py
+[t= 18.800s] RECUPERADO: 2026-04-09T15:02:15 | INFO     | Analitica            | ✅ PC3 recuperado — reanudando envío a BD principal

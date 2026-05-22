@@ -1,0 +1,10 @@
+Variable 2: Tiempo de respuesta Usuario→Semáforo
+Método: time.perf_counter() antes/después de REQ/REP Monitoreo→Analítica
+
+Test 1: 3.16 ms
+Test 2: 1.56 ms
+Test 3: 1.76 ms
+
+Promedio: 2.16 ms
+Min: 1.56 ms
+Max: 3.16 ms

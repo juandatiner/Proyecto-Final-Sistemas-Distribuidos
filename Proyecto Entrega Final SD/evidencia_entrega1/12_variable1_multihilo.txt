@@ -1,0 +1,7 @@
+Variable 1 con BROKER MULTIHILO — Registros en BD en 2 minutos
+Config: 75 sensores, broker MULTIHILO
+
+Inicio: 66,973
+Final:  67,973
+Delta:  1,000 registros en 120s
+Tasa:   8.3 reg/s

@@ -1,0 +1,74 @@
+{
+  "tabla1": [
+    [
+      "Escenario",
+      "Diseño",
+      "V1 (eventos en 2 min)",
+      "V2 prom (ms)",
+      "V2 min (ms)",
+      "V2 max (ms)"
+    ],
+    [
+      "A: 1 sensor c/10s",
+      "Simple",
+      36,
+      2.24,
+      1.82,
+      3.23
+    ],
+    [
+      "A: 1 sensor c/10s",
+      "Multihilo",
+      36,
+      1.94,
+      1.5,
+      3.01
+    ],
+    [
+      "B: 2 sensores c/5s",
+      "Simple",
+      144,
+      2.22,
+      1.63,
+      3.12
+    ],
+    [
+      "B: 2 sensores c/5s",
+      "Multihilo",
+      144,
+      2.21,
+      1.94,
+      2.93
+    ]
+  ],
+  "delta_v1_simple_pct": 300.0,
+  "delta_v1_multihilo_pct": 300.0,
+  "delta_v2_simple_pct": -1.07,
+  "delta_v2_multihilo_pct": 14.14,
+  "datos_crudos": {
+    "A_simple": {
+      "v1": 36,
+      "v2_prom": 2.24,
+      "v2_min": 1.82,
+      "v2_max": 3.228
+    },
+    "A_multihilo": {
+      "v1": 36,
+      "v2_prom": 1.938,
+      "v2_min": 1.496,
+      "v2_max": 3.011
+    },
+    "B_simple": {
+      "v1": 144,
+      "v2_prom": 2.216,
+      "v2_min": 1.628,
+      "v2_max": 3.118
+    },
+    "B_multihilo": {
+      "v1": 144,
+      "v2_prom": 2.212,
+      "v2_min": 1.94,
+      "v2_max": 2.931
+    }
+  }
+}

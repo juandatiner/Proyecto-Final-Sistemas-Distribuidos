@@ -1,0 +1,16 @@
+2026-05-06T15:35:14 | ============================================================
+2026-05-06T15:35:14 | EXPERIMENTO A_SIMPLE
+2026-05-06T15:35:14 |   escenario       : A
+2026-05-06T15:35:14 |   diseño broker   : simple
+2026-05-06T15:35:14 |   duración V1     : 30s
+2026-05-06T15:35:14 |   muestras V2     : 5
+2026-05-06T15:35:14 |   BD principal    : /tmp/trafico_principal_sim.db
+2026-05-06T15:35:14 |   PC2 (analítica) : 127.0.0.1:5560
+2026-05-06T15:35:14 | ============================================================
+2026-05-06T15:35:14 | Esperando 5s para estabilización del sistema...
+2026-05-06T15:35:19 | [V1] Snapshot inicial de la BD: /tmp/trafico_principal_sim.db
+2026-05-06T15:35:19 | [V1] Eventos al inicio: 3
+2026-05-06T15:35:19 | [V1] Esperando 30s ...
+2026-05-06T15:35:26 | [V1]   t+  7s -> 6 eventos (+3)
+2026-05-06T15:35:33 | [V1]   t+ 14s -> 9 eventos (+6)
+2026-05-06T15:35:40 | [V1]   t+ 21s -> 12 eventos (+9)

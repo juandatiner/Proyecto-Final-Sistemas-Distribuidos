@@ -1,0 +1,11 @@
+=== HW PC2 (MIG441) ===
+CPU(s):                               4
+Model name:                           Intel(R) Xeon(R) Gold 6240R CPU @ 2.40GHz
+Thread(s) per core:                   1
+Core(s) per socket:                   4
+Socket(s):                            1
+               total        used        free      shared  buff/cache   available
+Mem:            11Gi       2.6Gi       908Mi        24Mi       8.2Gi       8.7Gi
+Swap:          2.0Gi       620Mi       1.4Gi
+Linux MIG441 6.8.0-94-generic #96~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Jan 16 13:19:05 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+Python 3.10.12

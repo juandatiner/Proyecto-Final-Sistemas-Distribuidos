@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tráfico Urbano — Dashboard en Vivo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"
+          integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <h1>Gestión Inteligente de Tráfico Urbano <span class="tag">en vivo</span></h1>
+    <div class="ips">
+      <span>PC1 <code>{{ pc1_ip }}</code></span>
+      <span>PC2 <code>{{ pc2_ip }}</code></span>
+      <span>PC3 <code>{{ pc3_ip }}</code></span>
+    </div>
+  </header>
+
+  <main>
+    <!-- ── Panel de métricas ─────────────────────── -->
+    <section class="panel metricas">
+      <div class="metrica">
+        <h3>BD Principal (PC3)</h3>
+        <div class="num" id="m-principal">0</div>
+        <small>eventos persistidos</small>
+      </div>
+      <div class="metrica">
+        <h3>BD Réplica (PC2)</h3>
+        <div class="num" id="m-replica">0</div>
+        <small>eventos persistidos</small>
+      </div>
+      <div class="metrica">
+        <h3>Congestiones</h3>
+        <div class="num warn" id="m-congestiones">0</div>
+        <small>detectadas</small>
+      </div>
+      <div class="metrica">
+        <h3>Prioridades</h3>
+        <div class="num prio" id="m-prioridades">0</div>
+        <small>activadas</small>
+      </div>
+      <div class="metrica heartbeat">
+        <h3>Heartbeat PC3</h3>
+        <div class="hb-led" id="hb-led"></div>
+        <small id="hb-text">esperando…</small>
+      </div>
+    </section>
+
+    <div class="grid-content">
+      <!-- ── Mapa de la ciudad ────────────────────── -->
+      <section class="panel mapa">
+        <h2>Cuadrícula de la ciudad
+          <span class="leyenda">
+            <span class="lg-normal">Normal</span>
+            <span class="lg-mod">Moderado</span>
+            <span class="lg-cong">Congestión</span>
+            <span class="lg-prio">Prioridad</span>
+            <span class="lg-unk">Sin datos</span>
+          </span>
+        </h2>
+        <div class="ciudad">
+          {% for fila in filas %}
+            <div class="fila-grid">
+              {% for col in columnas %}
+                {% set inter = "INT-" ~ fila ~ col %}
+                <div class="interseccion" id="{{ inter }}" data-id="{{ inter }}">
+                  <div class="codigo">{{ fila }}{{ col }}</div>
+                  <div class="semaforo">
+                    <span class="luz roja"></span>
+                    <span class="luz verde"></span>
+                  </div>
+                  <div class="metricas-int">
+                    <span class="kv">Q:<b class="q-val">-</b></span>
+                    <span class="kv">Vp:<b class="vp-val">-</b></span>
+                    <span class="kv">Cv:<b class="cv-val">-</b></span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- ── Panel de control + stream eventos ──── -->
+      <aside class="panel sidebar">
+        <h2>Control manual</h2>
+        <div class="control-block">
+          <h3>🚑 Activar paso de ambulancia</h3>
+          <label>
+            Vías separadas por coma
+            <input type="text" id="amb-vias"
+                   placeholder="INT-A1, INT-B1, INT-C1"
+                   value="INT-A1, INT-B1, INT-C1">
+          </label>
+          <button id="btn-mapa" class="btn ghost" style="margin-bottom:6px;">📍 Marcar ruta en el mapa</button>
+          <div class="ruta-hint" id="ruta-hint" style="display:none;">
+            Haz clic en la <b>intersección de inicio</b> y luego en la <b>de fin</b>.
+            La ruta debe ser en línea recta (misma fila o misma columna).
+          </div>
+          <button id="btn-limpiar-ruta" class="btn ghost" style="margin-bottom:6px;display:none;">Limpiar ruta</button>
+          <button id="btn-amb" class="btn warn">Disparar prioridad</button>
+        </div>
+
+        <div class="control-block">
+          <h3>🚦 Forzar cambio de semáforo</h3>
+          <label>
+            Intersección
+            <select id="fz-int">
+              {% for inter in intersecciones %}
+                <option value="{{ inter }}">{{ inter }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>
+            Nuevo estado
+            <select id="fz-estado">
+              <option value="VERDE">VERDE</option>
+              <option value="ROJO">ROJO</option>
+            </select>
+          </label>
+          <button id="btn-fz" class="btn">Forzar cambio</button>
+        </div>
+
+        <div class="control-block">
+          <h3>Conectividad</h3>
+          <button id="btn-ping" class="btn ghost">Ping a analítica</button>
+          <pre id="ping-out" class="log-mini"></pre>
+        </div>
+
+        <h2>Stream de eventos</h2>
+        <ul id="stream" class="stream"></ul>
+      </aside>
+    </div>
+
+    <!-- ── Logs de acciones (último cinto) ───────── -->
+    <section class="panel acciones">
+      <h2>Últimas acciones de control</h2>
+      <ul id="acciones-log" class="log-list"></ul>
+    </section>
+  </main>
+
+  <footer>
+    Proyecto ISD 2026-30 · Dashboard servido desde PC3 · WebSocket en vivo
+  </footer>
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

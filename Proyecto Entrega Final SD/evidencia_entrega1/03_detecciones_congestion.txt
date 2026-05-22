@@ -1,0 +1,20 @@
+2026-04-09T13:45:13 | INFO     | Analitica            | [CAMARA            ] INT-D3 | Q= 21 Vp= 16.7 Cv= 10 → CONGESTION
+2026-04-09T13:45:13 | INFO     | Analitica            | [CAMARA            ] INT-E4 | Q= 12 Vp= 31.9 Cv=  5 → CONGESTION
+2026-04-09T13:45:13 | INFO     | Analitica            | [CAMARA            ] INT-B5 | Q= 15 Vp= 25.4 Cv=  2 → CONGESTION
+2026-04-09T13:45:17 | INFO     | Analitica            | [CAMARA            ] INT-C5 | Q= 19 Vp= 19.2 Cv=  1 → CONGESTION
+2026-04-09T13:45:17 | INFO     | Analitica            | [CAMARA            ] INT-B4 | Q= 12 Vp= 34.6 Cv=  3 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-A4 | Q= 17 Vp= 23.1 Cv=  3 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-A2 | Q= 19 Vp= 21.4 Cv= 10 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-A1 | Q= 19 Vp= 22.1 Cv= 10 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-D5 | Q= 18 Vp= 25.2 Cv=  7 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            |   ↳ Acción semáforo: CAMBIAR en INT-D5 (modo=CONGESTION)
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-B3 | Q= 17 Vp= 27.4 Cv= 11 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            |   ↳ Acción semáforo: CAMBIAR en INT-B3 (modo=CONGESTION)
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-B2 | Q= 22 Vp= 17.1 Cv=  8 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-B1 | Q= 25 Vp= 13.9 Cv= 15 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            |   ↳ Acción semáforo: CAMBIAR en INT-B1 (modo=CONGESTION)
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-C4 | Q= 13 Vp= 29.2 Cv=  7 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-D3 | Q= 15 Vp= 28.7 Cv= 10 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-E5 | Q= 18 Vp= 22.7 Cv=  6 → CONGESTION
+2026-04-09T13:45:18 | INFO     | Analitica            |   ↳ Acción semáforo: CAMBIAR en INT-E5 (modo=CONGESTION)
+2026-04-09T13:45:18 | INFO     | Analitica            | [CAMARA            ] INT-B5 | Q= 20 Vp= 18.8 Cv=  2 → CONGESTION

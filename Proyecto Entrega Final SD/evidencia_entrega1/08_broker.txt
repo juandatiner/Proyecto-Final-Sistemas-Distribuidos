@@ -1,0 +1,4 @@
+2026-04-09T12:40:07 | INFO     | BrokerZMQ            | Iniciando broker en modo: SIMPLE
+2026-04-09T12:40:07 | INFO     | BrokerZMQ            | [Simple] XSUB escuchando en *:5555
+2026-04-09T12:40:07 | INFO     | BrokerZMQ            | [Simple] XPUB publicando en *:5556
+2026-04-09T12:40:07 | INFO     | BrokerZMQ            | [Simple] Broker iniciado — esperando mensajes...

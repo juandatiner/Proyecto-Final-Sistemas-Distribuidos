@@ -1,0 +1,65 @@
+{
+  "principal": {
+    "eventos": 75401,
+    "congestiones": 25629,
+    "prioridades": 11
+  },
+  "replica": {
+    "eventos": 86931,
+    "congestiones": 29444,
+    "prioridades": 11
+  },
+  "diferencia_eventos_solo_replica": 11530,
+  "por_sensor": {
+    "camara": 45223,
+    "gps": 22628,
+    "espira_inductiva": 7550
+  },
+  "clasificacion": {
+    "CONGESTION": 25629,
+    "MODERADO": 40315,
+    "NORMAL": 9457
+  },
+  "top10_congestion": [
+    [
+      "INT-E4",
+      1106
+    ],
+    [
+      "INT-D3",
+      1099
+    ],
+    [
+      "INT-C3",
+      1056
+    ],
+    [
+      "INT-C4",
+      1055
+    ],
+    [
+      "INT-D2",
+      1045
+    ],
+    [
+      "INT-A4",
+      1038
+    ],
+    [
+      "INT-D4",
+      1030
+    ],
+    [
+      "INT-B5",
+      1026
+    ],
+    [
+      "INT-E3",
+      1023
+    ],
+    [
+      "INT-A2",
+      1023
+    ]
+  ]
+}

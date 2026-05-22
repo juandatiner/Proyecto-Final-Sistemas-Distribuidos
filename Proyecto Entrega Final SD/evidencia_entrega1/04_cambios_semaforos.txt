@@ -1,0 +1,30 @@
+2026-04-09T13:45:13 | INFO     | Semaforos            | RESETEAR → {'ok': True, 'semaforo': {'interseccion': 'INT-E3', 'estado': 'ROJO', 'modo': 'NORMAL', 'tiempo_restante': 15, 'ultimo_cambio': '2026-04-09T18:45:13.279084+00:00'}}
+2026-04-09T13:45:13 | INFO     | Semaforos            | [EXTENDER] INT-D1: +5s verde | restante=30s
+2026-04-09T13:45:13 | INFO     | Semaforos            | EXTENDER → {'ok': True, 'semaforo': {'interseccion': 'INT-D1', 'estado': 'VERDE', 'modo': 'CONGESTION', 'tiempo_restante': 30, 'ultimo_cambio': '2026-04-09T18:45:08.328392+00:00'}}
+2026-04-09T13:45:17 | INFO     | Semaforos            | [AUTO] INT-E1: ROJO → VERDE ... ahora ROJO por 15s
+2026-04-09T13:45:17 | INFO     | Semaforos            | [AUTO] INT-E2: ROJO → VERDE ... ahora ROJO por 10s
+2026-04-09T13:45:18 | INFO     | Semaforos            | [CAMBIO] INT-A3: VERDE → ROJO | modo=NORMAL | dur=15s
+2026-04-09T13:45:18 | INFO     | Semaforos            | RESETEAR → {'ok': True, 'semaforo': {'interseccion': 'INT-A3', 'estado': 'ROJO', 'modo': 'NORMAL', 'tiempo_restante': 15, 'ultimo_cambio': '2026-04-09T18:45:18.103202+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [CAMBIO] INT-D5: ROJO → VERDE | modo=CONGESTION | dur=30s
+2026-04-09T13:45:18 | INFO     | Semaforos            | CAMBIAR → {'ok': True, 'semaforo': {'interseccion': 'INT-D5', 'estado': 'VERDE', 'modo': 'CONGESTION', 'tiempo_restante': 30, 'ultimo_cambio': '2026-04-09T18:45:18.125141+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [AUTO] INT-D4: ROJO → VERDE ... ahora ROJO por 15s
+2026-04-09T13:45:18 | INFO     | Semaforos            | [CAMBIO] INT-B3: VERDE → VERDE | modo=CONGESTION | dur=30s
+2026-04-09T13:45:18 | INFO     | Semaforos            | CAMBIAR → {'ok': True, 'semaforo': {'interseccion': 'INT-B3', 'estado': 'VERDE', 'modo': 'CONGESTION', 'tiempo_restante': 30, 'ultimo_cambio': '2026-04-09T18:45:18.142662+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [CAMBIO] INT-D2: VERDE → ROJO | modo=NORMAL | dur=15s
+2026-04-09T13:45:18 | INFO     | Semaforos            | RESETEAR → {'ok': True, 'semaforo': {'interseccion': 'INT-D2', 'estado': 'ROJO', 'modo': 'NORMAL', 'tiempo_restante': 15, 'ultimo_cambio': '2026-04-09T18:45:18.149555+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [CAMBIO] INT-D4: ROJO → ROJO | modo=NORMAL | dur=15s
+2026-04-09T13:45:18 | INFO     | Semaforos            | RESETEAR → {'ok': True, 'semaforo': {'interseccion': 'INT-D4', 'estado': 'ROJO', 'modo': 'NORMAL', 'tiempo_restante': 15, 'ultimo_cambio': '2026-04-09T18:45:18.177119+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [EXTENDER] INT-C1: +5s verde | restante=25s
+2026-04-09T13:45:18 | INFO     | Semaforos            | EXTENDER → {'ok': True, 'semaforo': {'interseccion': 'INT-C1', 'estado': 'VERDE', 'modo': 'CONGESTION', 'tiempo_restante': 25, 'ultimo_cambio': '2026-04-09T18:45:08.171277+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [CAMBIO] INT-C3: VERDE → ROJO | modo=NORMAL | dur=15s
+2026-04-09T13:45:18 | INFO     | Semaforos            | RESETEAR → {'ok': True, 'semaforo': {'interseccion': 'INT-C3', 'estado': 'ROJO', 'modo': 'NORMAL', 'tiempo_restante': 15, 'ultimo_cambio': '2026-04-09T18:45:18.228886+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [CAMBIO] INT-B1: VERDE → VERDE | modo=CONGESTION | dur=30s
+2026-04-09T13:45:18 | INFO     | Semaforos            | CAMBIAR → {'ok': True, 'semaforo': {'interseccion': 'INT-B1', 'estado': 'VERDE', 'modo': 'CONGESTION', 'tiempo_restante': 30, 'ultimo_cambio': '2026-04-09T18:45:18.230598+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [EXTENDER] INT-A5: +5s verde | restante=30s
+2026-04-09T13:45:18 | INFO     | Semaforos            | EXTENDER → {'ok': True, 'semaforo': {'interseccion': 'INT-A5', 'estado': 'VERDE', 'modo': 'CONGESTION', 'tiempo_restante': 30, 'ultimo_cambio': '2026-04-09T18:45:13.231106+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [EXTENDER] INT-E3: +5s verde | restante=5s
+2026-04-09T13:45:18 | INFO     | Semaforos            | EXTENDER → {'ok': True, 'semaforo': {'interseccion': 'INT-E3', 'estado': 'VERDE', 'modo': 'NORMAL', 'tiempo_restante': 5, 'ultimo_cambio': '2026-04-09T18:45:13.279084+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [CAMBIO] INT-E4: VERDE → ROJO | modo=NORMAL | dur=15s
+2026-04-09T13:45:18 | INFO     | Semaforos            | RESETEAR → {'ok': True, 'semaforo': {'interseccion': 'INT-E4', 'estado': 'ROJO', 'modo': 'NORMAL', 'tiempo_restante': 15, 'ultimo_cambio': '2026-04-09T18:45:18.296381+00:00'}}
+2026-04-09T13:45:18 | INFO     | Semaforos            | [CAMBIO] INT-E5: ROJO → VERDE | modo=CONGESTION | dur=30s
+2026-04-09T13:45:18 | INFO     | Semaforos            | CAMBIAR → {'ok': True, 'semaforo': {'interseccion': 'INT-E5', 'estado': 'VERDE', 'modo': 'CONGESTION', 'tiempo_restante': 30, 'ultimo_cambio': '2026-04-09T18:45:18.299287+00:00'}}

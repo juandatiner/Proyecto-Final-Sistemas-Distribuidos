@@ -1,0 +1,29 @@
+═══════════════════════════════════════════════════════════
+  EVIDENCIA DE EJECUCIÓN - jue 09 abr 2026 13:45:19 -05
+  Proyecto: Gestión Inteligente de Tráfico Urbano
+═══════════════════════════════════════════════════════════
+
+### PC1 (10.43.99.128) - Capa de Adquisición ###
+77
+---procesos---
+2644811 python3 /home/estudiante/trafico_urbano/pc1/broker_zmq.py --modo simple
+2644827 python3 /home/estudiante/trafico_urbano/pc1/sensor_camara.py --interseccion INT-A1
+2644828 python3 /home/estudiante/trafico_urbano/pc1/sensor_espira.py --interseccion INT-A1
+2644829 python3 /home/estudiante/trafico_urbano/pc1/sensor_gps.py --interseccion INT-A1
+2644830 python3 /home/estudiante/trafico_urbano/pc1/sensor_camara.py --interseccion INT-A2
+2644831 python3 /home/estudiante/trafico_urbano/pc1/sensor_espira.py --interseccion INT-A2
+2644834 python3 /home/estudiante/trafico_urbano/pc1/sensor_gps.py --interseccion INT-A2
+2644835 python3 /home/estudiante/trafico_urbano/pc1/sensor_camara.py --interseccion INT-A3
+2644836 python3 /home/estudiante/trafico_urbano/pc1/sensor_espira.py --interseccion INT-A3
+2644837 python3 /home/estudiante/trafico_urbano/pc1/sensor_gps.py --interseccion INT-A3
+
+### PC2 (10.43.100.144) - Capa de Procesamiento ###
+2814758 python3 /home/estudiante/trafico_urbano/pc2/base_datos_replica.py
+2814777 python3 /home/estudiante/trafico_urbano/pc2/servicio_semaforos.py
+2814787 python3 /home/estudiante/trafico_urbano/pc2/servicio_analitica.py
+2829221 tail -f /home/estudiante/trafico_urbano/logs/bd_replica.log
+
+### PC3 (10.43.100.90) - Capa de Persistencia ###
+1776205 /bin/bash -c source /home/estudiante/.claude/shell-snapshots/snapshot-bash-1775758494036-ngp0ef.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && eval 'cd ~/trafico_urbano && nohup python3 pc3/base_datos_principal.py > logs/bd_principal.log 2>&1 & sleep 3 echo "PID: $!" pgrep -af '"'"'base_datos_principal'"'"' echo "---" tail -20 logs/bd_principal.log' < /dev/null && pwd -P >| /tmp/claude-4adf-cwd
+1776207 python3 pc3/base_datos_principal.py
+1798498 /bin/bash -c source /home/estudiante/.claude/shell-snapshots/snapshot-bash-1775758494036-ngp0ef.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && eval 'OUT=~/trafico_urbano/evidencia_entrega1  # Evidencia 1: Estado de procesos en las 3 PCs { echo "═══════════════════════════════════════════════════════════" echo "  EVIDENCIA DE EJECUCIÓN - $(date)" echo "  Proyecto: Gestión Inteligente de Tráfico Urbano" echo "═══════════════════════════════════════════════════════════" echo "" echo "### PC1 (10.43.99.128) - Capa de Adquisición ###" /tmp/ssh_exec.sh pc1 "pgrep -af '"'"'broker_zmq|sensor_'"'"' | wc -l; echo '"'"'---procesos---'"'"'; pgrep -af '"'"'broker_zmq|sensor_'"'"' | head -10" echo "" echo "### PC2 (10.43.100.144) - Capa de Procesamiento ###" /tmp/ssh_exec.sh pc2 "pgrep -af '"'"'analitica|semaforos|replica'"'"'" echo "" echo "### PC3 (10.43.100.90) - Capa de Persistencia ###" pgrep -af '"'"'base_datos_principal|servicio_monitoreo'"'"' } > $OUT/01_procesos_activos.txt echo "✓ 01_procesos_activos.txt"  # Evidencia 2: Heartbeat y detección de fallos (PC2) /tmp/ssh_exec.sh pc2 "grep -E '"'"'PC3|heartbeat|recuperado|responde'"'"' ~/trafico_urbano/logs/analitica.log | tail -30" > $OUT/02_heartbeat_fallos.txt echo "✓ 02_heartbeat_fallos.txt"  # Evidencia 3: Flujo congestion -> semaforo /tmp/ssh_exec.sh pc2 "grep -E '"'"'CONGESTION|CAMBIAR'"'"' ~/trafico_urbano/logs/analitica.log | tail -20" > $OUT/03_detecciones_congestion.txt echo "✓ 03_detecciones_congestion.txt"  # Evidencia 4: Cambios de semaforo /tmp/ssh_exec.sh pc2 "tail -30 ~/trafico_urbano/logs/semaforos.log" > $OUT/04_cambios_semaforos.txt echo "✓ 04_cambios_semaforos.txt"  # Evidencia 5: BD Principal recibiendo datos tail -20 ~/trafico_urbano/logs/bd_principal.log > $OUT/05_bd_principal.txt echo "✓ 05_bd_principal.txt"  # Evidencia 6: BD Replica /tmp/ssh_exec.sh pc2 "tail -20 ~/trafico_urbano/logs/bd_replica.log" > $OUT/06_bd_replica.txt echo "✓ 06_bd_replica.txt"  # Evidencia 7: Sensor individual (muestra) /tmp/ssh_exec.sh pc1 "tail -10 ~/trafico_urbano/logs/cam_C5.log" > $OUT/07_sensor_cam_C5.txt echo "✓ 07_sensor_cam_C5.txt" /tmp/ssh_exec.sh pc1 "tail -10 ~/trafico_urbano/logs/broker.log" > $OUT/08_broker.txt echo "✓ 08_broker.txt"  # Ver metricas.json (se quedó en 0 bytes, regenerar) python3 << '"'"'PYEOF'"'"' import sqlite3, json conn = sqlite3.connect('"'"'/home/estudiante/trafico_urbano/pc3/trafico_principal.db'"'"') c = conn.cursor() data = {} for t in ['"'"'eventos_sensores'"'"','"'"'congestion_log'"'"','"'"'prioridades_log'"'"']:     c.execute(f"SELECT COUNT(*) FROM {t}")     data[t] = c.fetchone()[0] c.execute("SELECT topic, COUNT(*) FROM eventos_sensores GROUP BY topic") data['"'"'por_sensor'"'"'] = dict(c.fetchall()) c.execute("SELECT estado_trafico, COUNT(*) FROM eventos_sensores WHERE estado_trafico IS NOT NULL GROUP BY estado_trafico") data['"'"'clasificacion'"'"'] = dict(c.fetchall()) with open('"'"'/home/estudiante/trafico_urbano/evidencia_entrega1/metricas.json'"'"','"'"'w'"'"') as f:     json.dump(data, f, indent=2, ensure_ascii=False) print("metricas.json regenerado:", data) PYEOF  ls -la $OUT/' && pwd -P >| /tmp/claude-630f-cwd

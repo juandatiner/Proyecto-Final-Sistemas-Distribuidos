@@ -1,0 +1,5 @@
+Escenario,Diseño,V1 (eventos en 2 min),V2 prom (ms),V2 min (ms),V2 max (ms)
+A: 1 sensor c/10s,Simple,36,2.24,1.82,3.23
+A: 1 sensor c/10s,Multihilo,36,1.94,1.5,3.01
+B: 2 sensores c/5s,Simple,144,2.22,1.63,3.12
+B: 2 sensores c/5s,Multihilo,144,2.21,1.94,2.93

@@ -1,0 +1,42 @@
+{
+  "ciudad": {
+    "filas": ["A", "B", "C", "D", "E"],
+    "columnas": [1, 2, 3, 4, 5]
+  },
+  "sensores": {
+    "intervalo_camara_seg": 5,
+    "intervalo_espira_seg": 30,
+    "intervalo_gps_seg": 10,
+    "velocidad_max_kmh": 50
+  },
+  "red": {
+    "PC1_IP": "10.43.99.128",
+    "PC2_IP": "10.43.100.144",
+    "PC3_IP": "10.43.100.90",
+    "puertos": {
+      "broker_sub": 5555,
+      "broker_pub": 5556,
+      "semaforos_pull": 5557,
+      "db_replica_pull": 5558,
+      "db_main_pull": 5559,
+      "analitica_rep": 5560,
+      "heartbeat_pub": 5561,
+      "heartbeat_sub": 5562
+    }
+  },
+  "semaforos": {
+    "tiempo_verde_normal_seg": 15,
+    "tiempo_verde_congestion_seg": 30,
+    "tiempo_verde_prioridad_seg": 60,
+    "tiempo_rojo_normal_seg": 15,
+    "tiempo_rojo_congestion_seg": 10
+  },
+  "reglas_trafico": {
+    "normal":     { "Q_max": 5,  "Vp_min": 35, "Cv_max": 10 },
+    "congestion": { "Q_min": 10, "Vp_max": 15, "Cv_min": 20 }
+  },
+  "heartbeat": {
+    "intervalo_seg": 3,
+    "timeout_seg": 9
+  }
+}

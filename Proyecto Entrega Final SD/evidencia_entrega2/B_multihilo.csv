@@ -1,0 +1,2 @@
+escenario,diseno,v1_delta_eventos,v1_duracion_s,v1_tasa_reg_s,v2_promedio_ms,v2_min_ms,v2_max_ms,v2_n
+B,multihilo,144,120.11,1.199,2.212,1.94,2.931,5

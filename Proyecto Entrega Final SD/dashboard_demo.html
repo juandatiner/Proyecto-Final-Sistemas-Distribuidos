@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tráfico Urbano — Dashboard (DEMO standalone)</title>
+<style>
+:root{
+  --bg:#0d1117; --bg-panel:#161b22; --bg-panel2:#1c2129; --border:#30363d;
+  --fg:#e6edf3; --fg-mute:#8b949e; --accent:#58a6ff; --green:#3fb950;
+  --yellow:#d29922; --orange:#db6d28; --red:#f85149; --purple:#bc8cff; --grey:#4a505a;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;font-family:-apple-system,"Segoe UI",Inter,sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:linear-gradient(90deg,#161b22,#0d1117);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+header h1{margin:0;font-size:20px;letter-spacing:.3px;}
+.tag{background:var(--green);color:#0d1117;font-size:11px;padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle;text-transform:uppercase;font-weight:600;}
+.tag.demo{background:var(--yellow);}
+.ips{display:flex;gap:16px;font-size:12px;color:var(--fg-mute);}
+.ips code{background:#0d1117;padding:2px 6px;border-radius:4px;}
+main{padding:16px 24px 32px;max-width:1500px;margin:0 auto;}
+.panel{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:16px;}
+.panel h2{margin:0 0 12px;font-size:16px;display:flex;align-items:center;gap:10px;}
+.metricas{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:14px;}
+.metrica{background:var(--bg-panel2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);}
+.metrica h3{margin:0;font-size:12px;color:var(--fg-mute);text-transform:uppercase;letter-spacing:.5px;font-weight:600;}
+.metrica .num{font-size:32px;font-weight:700;color:var(--accent);margin:4px 0;font-variant-numeric:tabular-nums;}
+.metrica .num.warn{color:var(--orange);}
+.metrica .num.prio{color:var(--purple);}
+.metrica small{color:var(--fg-mute);font-size:11px;}
+.heartbeat{display:flex;flex-direction:column;align-items:flex-start;}
+.hb-led{width:22px;height:22px;border-radius:50%;background:var(--grey);margin:6px 0;transition:background .3s ease;}
+.hb-led.on{background:var(--green);animation:pulse 2s infinite;}
+.hb-led.off{background:var(--red);animation:none;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,185,80,.6);}70%{box-shadow:0 0 0 10px rgba(63,185,80,0);}100%{box-shadow:0 0 0 0 rgba(63,185,80,0);}}
+.grid-content{display:grid;grid-template-columns:1fr 380px;gap:16px;}
+.mapa h2 .leyenda{display:flex;gap:8px;font-size:11px;margin-left:auto;font-weight:400;}
+.leyenda>span{padding:2px 8px;border-radius:4px;font-weight:600;color:#0d1117;}
+.lg-normal{background:var(--green);}.lg-mod{background:var(--yellow);}.lg-cong{background:var(--red);}.lg-prio{background:var(--purple);}.lg-unk{background:var(--grey);color:var(--fg);}
+.ciudad{display:flex;flex-direction:column;gap:8px;}
+.fila-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.interseccion{background:var(--bg-panel2);border:2px solid var(--grey);border-radius:8px;padding:8px;min-height:100px;position:relative;transition:border-color .4s,background .4s,box-shadow .4s;}
+.interseccion .codigo{font-size:14px;font-weight:700;color:var(--fg-mute);}
+.interseccion .semaforo{display:flex;gap:6px;margin:6px 0;}
+.luz{width:14px;height:14px;border-radius:50%;background:#2f343c;border:1.5px solid #0a0d11;box-shadow:inset 0 0 4px rgba(0,0,0,.6);}
+.semaforo.verde .luz.verde{background:var(--green);box-shadow:0 0 8px var(--green);}
+.semaforo.rojo .luz.roja{background:var(--red);box-shadow:0 0 8px var(--red);}
+.metricas-int{display:flex;gap:6px;flex-wrap:wrap;font-size:10px;color:var(--fg-mute);}
+.metricas-int .kv b{color:var(--fg);margin-left:2px;}
+.estado-label{font-size:10px;font-weight:600;margin-top:2px;}
+.interseccion[data-estado="NORMAL"]{border-color:var(--green);background:rgba(63,185,80,.07);}
+.interseccion[data-estado="MODERADO"]{border-color:var(--yellow);background:rgba(210,153,34,.08);}
+.interseccion[data-estado="CONGESTION"]{border-color:var(--red);background:rgba(248,81,73,.10);animation:blink 1.4s infinite;}
+.interseccion[data-estado="PRIORIDAD"]{border-color:var(--purple);background:rgba(188,140,255,.13);box-shadow:0 0 14px rgba(188,140,255,.6);}
+.interseccion[data-estado="ROJO_MANUAL"]{border-color:var(--red);background:rgba(248,81,73,.10);}
+@keyframes blink{0%,100%{box-shadow:0 0 0 rgba(248,81,73,0);}50%{box-shadow:0 0 14px rgba(248,81,73,.6);}}
+.interseccion.flash{box-shadow:0 0 0 3px var(--accent);}
+.ciudad.modo-ruta .interseccion{cursor:crosshair;}
+.ciudad.modo-ruta .interseccion:hover{outline:2px dashed var(--accent);outline-offset:-2px;}
+.interseccion.ruta{outline:3px solid var(--purple);outline-offset:-3px;}
+.interseccion.ruta-origen{outline:3px solid var(--accent);outline-offset:-3px;}
+.interseccion .ruta-orden{position:absolute;top:4px;right:6px;font-size:11px;font-weight:700;color:var(--purple);background:rgba(13,17,23,.85);border-radius:3px;padding:0 4px;}
+.interseccion.ruta-origen .ruta-orden{color:var(--accent);}
+.modo-ruta-activo{background:var(--purple)!important;color:#0d1117!important;}
+.ruta-hint{font-size:11px;color:var(--fg-mute);margin:4px 0 8px;line-height:1.4;}
+.sidebar h2{margin-top:18px;}.sidebar h2:first-child{margin-top:0;}
+.control-block{background:var(--bg-panel2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:12px;}
+.control-block h3{margin:0 0 8px;font-size:13px;font-weight:600;}
+.control-block label{display:block;font-size:11px;color:var(--fg-mute);margin-bottom:8px;}
+.control-block input,.control-block select{width:100%;padding:6px 8px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--fg);font-size:12px;margin-top:3px;font-family:inherit;}
+.btn{display:inline-block;width:100%;padding:8px 12px;background:var(--accent);color:#0d1117;border:none;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px;transition:filter .15s;}
+.btn:hover{filter:brightness(1.15);}
+.btn.warn{background:var(--orange);}
+.btn.danger{background:var(--red);}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent);}
+.stream{list-style:none;padding:0;margin:0;max-height:320px;overflow-y:auto;font-family:"SF Mono",Menlo,monospace;font-size:11px;}
+.stream li{padding:4px 6px;border-bottom:1px solid var(--border);display:flex;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stream li .topic{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;color:#0d1117;min-width:50px;text-align:center;}
+.stream li.t-camara .topic{background:#58a6ff;}
+.stream li.t-espira_inductiva .topic{background:#d2a8ff;}
+.stream li.t-gps .topic{background:#56d364;}
+.stream li .ts{color:var(--fg-mute);}
+.log-list{list-style:none;padding:0;margin:0;font-family:"SF Mono",Menlo,monospace;font-size:12px;}
+.log-list li{padding:6px 10px;border-bottom:1px solid var(--border);display:flex;gap:12px;}
+.log-list li.fail{color:var(--red);}.log-list li.ok{color:var(--green);}
+footer{text-align:center;font-size:11px;color:var(--fg-mute);padding:14px;border-top:1px solid var(--border);}
+.demo-banner{background:rgba(210,153,34,.12);border:1px solid var(--yellow);color:var(--yellow);font-size:12px;padding:8px 14px;border-radius:8px;margin-bottom:14px;}
+@media (max-width:1100px){.grid-content{grid-template-columns:1fr;}.metricas{grid-template-columns:repeat(3,1fr);}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Gestión Inteligente de Tráfico Urbano <span class="tag">en vivo</span><span class="tag demo">demo local</span></h1>
+  <div class="ips">
+    <span>PC1 <code>10.43.99.128</code></span>
+    <span>PC2 <code>10.43.100.144</code></span>
+    <span>PC3 <code>10.43.100.90</code></span>
+  </div>
+</header>
+
+<main>
+  <div class="demo-banner">
+    Modo DEMO: simulación client-side de las 3 PCs (sin servidor). El dashboard real corre en PC3 con datos verdaderos de los sensores vía ZeroMQ. Esta versión sirve para ver el comportamiento y como respaldo offline en la sustentación.
+  </div>
+
+  <section class="panel metricas">
+    <div class="metrica"><h3>BD Principal (PC3)</h3><div class="num" id="m-principal">0</div><small>eventos persistidos</small></div>
+    <div class="metrica"><h3>BD Réplica (PC2)</h3><div class="num" id="m-replica">0</div><small>eventos persistidos</small></div>
+    <div class="metrica"><h3>Congestiones</h3><div class="num warn" id="m-congestiones">0</div><small>detectadas</small></div>
+    <div class="metrica"><h3>Prioridades</h3><div class="num prio" id="m-prioridades">0</div><small>activadas</small></div>
+    <div class="metrica heartbeat"><h3>Heartbeat PC3</h3><div class="hb-led on" id="hb-led"></div><small id="hb-text">PC3 activo</small></div>
+  </section>
+
+  <div class="grid-content">
+    <section class="panel mapa">
+      <h2>Cuadrícula de la ciudad
+        <span class="leyenda">
+          <span class="lg-normal">Normal</span>
+          <span class="lg-mod">Moderado</span>
+          <span class="lg-cong">Congestión</span>
+          <span class="lg-prio">Prioridad</span>
+          <span class="lg-unk">Sin datos</span>
+        </span>
+      </h2>
+      <div class="ciudad" id="ciudad"></div>
+    </section>
+
+    <aside class="panel sidebar">
+      <h2>Control manual</h2>
+      <div class="control-block">
+        <h3>🚑 Activar paso de ambulancia</h3>
+        <label>Vías separadas por coma
+          <input type="text" id="amb-vias" value="INT-A1, INT-B1, INT-C1">
+        </label>
+        <button id="btn-mapa" class="btn ghost" style="margin-bottom:6px;">📍 Marcar ruta en el mapa</button>
+        <div class="ruta-hint" id="ruta-hint" style="display:none;">
+          Haz clic en la <b>intersección de inicio</b> y luego en la <b>de fin</b>. La ruta debe ser en línea recta (misma fila o misma columna).
+        </div>
+        <button id="btn-limpiar-ruta" class="btn ghost" style="margin-bottom:6px;display:none;">Limpiar ruta</button>
+        <button id="btn-amb" class="btn warn">Disparar prioridad</button>
+      </div>
+      <div class="control-block">
+        <h3>🚦 Forzar cambio de semáforo</h3>
+        <label>Intersección<select id="fz-int"></select></label>
+        <label>Nuevo estado
+          <select id="fz-estado"><option value="VERDE">VERDE</option><option value="ROJO">ROJO</option></select>
+        </label>
+        <button id="btn-fz" class="btn">Forzar cambio</button>
+      </div>
+      <div class="control-block">
+        <h3>⚙️ Simulación</h3>
+        <label>Diseño del broker
+          <select id="modo-broker"><option value="simple">Simple (1 hilo)</option><option value="multihilo">Multihilo</option></select>
+        </label>
+        <button id="btn-falla" class="btn danger">Simular caída de PC3</button>
+      </div>
+      <h2>Stream de eventos</h2>
+      <ul id="stream" class="stream"></ul>
+    </aside>
+  </div>
+
+  <section class="panel acciones">
+    <h2>Últimas acciones de control</h2>
+    <ul id="acciones-log" class="log-list"></ul>
+  </section>
+</main>
+
+<footer>Proyecto ISD 2026-30 · Dashboard DEMO standalone (simulación) · Abre el real en http://10.43.100.90:8080</footer>
+
+<script>
+(function(){
+  "use strict";
+  const FILAS=['A','B','C','D','E'], COLS=[1,2,3,4,5];
+  const REGLAS={normal:{Q:5,Vp:35,Cv:10},cong:{Q:10,Vp:15,Cv:20}};
+  const ciudad=document.getElementById('ciudad');
+  const stream=document.getElementById('stream');
+  const accLog=document.getElementById('acciones-log');
+  const fzInt=document.getElementById('fz-int');
+  const cells={}, datos={};
+  let nPrincipal=0,nReplica=0,nCong=0,nPrio=0;
+  let pc3Activo=true, prioridadHasta={};
+
+  function clasificar(d){
+    if(d.Q>=REGLAS.cong.Q||d.Vp<REGLAS.cong.Vp||d.Cv>=REGLAS.cong.Cv) return 'CONGESTION';
+    if(d.Q<REGLAS.normal.Q&&d.Vp>REGLAS.normal.Vp&&d.Cv<REGLAS.normal.Cv) return 'NORMAL';
+    return 'MODERADO';
+  }
+  // Construir cuadrícula
+  for(const f of FILAS){
+    const fila=document.createElement('div'); fila.className='fila-grid';
+    for(const c of COLS){
+      const id=`INT-${f}${c}`;
+      datos[id]={Q:0,Vp:50,Cv:0,estado:'NORMAL',verde:false};
+      const opt=document.createElement('option'); opt.value=id; opt.textContent=id; fzInt.appendChild(opt);
+      const cel=document.createElement('div'); cel.className='interseccion'; cel.id=id; cel.dataset.estado='NORMAL';
+      cel.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;">
+        <span class="codigo">${f}${c}</span>
+        <span class="semaforo rojo"><span class="luz roja"></span><span class="luz verde"></span></span></div>
+        <div class="metricas-int"><span class="kv">Q:<b class="q">-</b></span><span class="kv">Vp:<b class="vp">-</b></span><span class="kv">Cv:<b class="cv">-</b></span></div>
+        <div class="estado-label">NORMAL</div>`;
+      fila.appendChild(cel); cells[id]=cel;
+    }
+    ciudad.appendChild(fila);
+  }
+  const TODAS=Object.keys(datos);
+
+  function fmt(v){return Number.isInteger(v)?v:(+v).toFixed(1);}
+  function setMetric(id,v){document.getElementById(id).textContent=v.toLocaleString();}
+
+  function renderCelda(id){
+    const d=datos[id], cel=cells[id];
+    cel.dataset.estado=d.estado;
+    cel.querySelector('.q').textContent=fmt(d.Q);
+    cel.querySelector('.vp').textContent=fmt(d.Vp);
+    cel.querySelector('.cv').textContent=fmt(d.Cv);
+    cel.querySelector('.estado-label').textContent=d.estado;
+    const sem=cel.querySelector('.semaforo');
+    const verde=(d.estado!=='CONGESTION' && d.estado!=='ROJO_MANUAL');
+    sem.className='semaforo '+(verde?'verde':'rojo');
+  }
+
+  function addStream(topic,id,det){
+    const li=document.createElement('li'); li.className='t-'+topic;
+    li.innerHTML=`<span class="topic">${topic}</span><span class="ts">${new Date().toLocaleTimeString()}</span><span><b>${id}</b> ${det}</span>`;
+    stream.prepend(li); while(stream.children.length>30) stream.lastChild.remove();
+  }
+
+  // Bucle de sensores: cada tick, un sensor aleatorio publica
+  function tickSensor(){
+    const id=TODAS[Math.floor(Math.random()*TODAS.length)];
+    const d=datos[id];
+    const tipo=['camara','espira_inductiva','gps'][Math.floor(Math.random()*3)];
+    if(tipo==='camara'){ d.Q=Math.floor(Math.random()*25); d.Vp=+(10+Math.random()*40).toFixed(1); addStream(tipo,id,`vol=${d.Q} vel=${d.Vp}`);}
+    else if(tipo==='espira_inductiva'){ d.Cv=Math.floor(Math.random()*22); addStream(tipo,id,`cnt=${d.Cv}`);}
+    else { d.Vp=+(8+Math.random()*42).toFixed(1); const niv=d.Vp<10?'ALTA':(d.Vp>40?'BAJA':'NORMAL'); addStream(tipo,id,`${niv} v=${d.Vp}`);}
+    // ¿prioridad activa?
+    if(prioridadHasta[id]&&Date.now()<prioridadHasta[id]) d.estado='PRIORIDAD';
+    else d.estado=clasificar(d);
+    if(d.estado==='CONGESTION') nCong++;
+    renderCelda(id);
+    // contadores BD (la réplica siempre; la principal solo si PC3 vivo)
+    nReplica++; if(pc3Activo) nPrincipal++;
+    setMetric('m-replica',nReplica);
+    setMetric('m-principal',nPrincipal);
+    setMetric('m-congestiones',nCong);
+    // flash
+    cells[id].classList.add('flash'); setTimeout(()=>cells[id].classList.remove('flash'),200);
+  }
+
+  function logAccion(txt,ok){
+    const li=document.createElement('li'); li.className=ok?'ok':'fail';
+    li.innerHTML=`<span>${new Date().toLocaleTimeString()}</span><span>${txt}</span>`;
+    accLog.prepend(li); while(accLog.children.length>12) accLog.lastChild.remove();
+  }
+
+  // ── Selección de ruta en el mapa (línea recta) ──────────────
+  let modoRuta=false, rutaSel=[];
+  const idx=id=>{const m=id.match(/INT-([A-E])(\d)/);return{f:m[1].charCodeAt(0)-65,c:+m[2]-1};};
+  const mkId=(f,c)=>`INT-${String.fromCharCode(65+f)}${c+1}`;
+
+  function limpiarRuta(){
+    rutaSel.forEach(id=>{
+      const cel=cells[id];
+      cel.classList.remove('ruta','ruta-origen');
+      const o=cel.querySelector('.ruta-orden'); if(o) o.remove();
+    });
+    rutaSel=[];
+  }
+  function pintarRuta(){
+    limpiarRutaClases();
+    rutaSel.forEach((id,i)=>{
+      const cel=cells[id];
+      cel.classList.add(i===0?'ruta-origen':'ruta');
+      let o=cel.querySelector('.ruta-orden');
+      if(!o){o=document.createElement('span');o.className='ruta-orden';cel.appendChild(o);}
+      o.textContent=i+1;
+    });
+    document.getElementById('amb-vias').value=rutaSel.join(', ');
+  }
+  function limpiarRutaClases(){
+    Object.values(cells).forEach(cel=>{
+      cel.classList.remove('ruta','ruta-origen');
+      const o=cel.querySelector('.ruta-orden'); if(o) o.remove();
+    });
+  }
+  function construirLinea(a,b){
+    const A=idx(a),B=idx(b);
+    if(A.f===B.f){ // misma fila → horizontal
+      const lo=Math.min(A.c,B.c),hi=Math.max(A.c,B.c),paso=(A.c<=B.c)?1:-1;
+      const arr=[]; for(let c=A.c;c!==B.c+paso;c+=paso) arr.push(mkId(A.f,c)); return arr;
+    }
+    if(A.c===B.c){ // misma columna → vertical
+      const paso=(A.f<=B.f)?1:-1;
+      const arr=[]; for(let f=A.f;f!==B.f+paso;f+=paso) arr.push(mkId(f,A.c)); return arr;
+    }
+    return null; // no colineal
+  }
+  function clickCelda(id){
+    if(!modoRuta) return;
+    if(rutaSel.length===0){ rutaSel=[id]; pintarRuta(); return; }
+    if(rutaSel.length>=1){
+      const origen=rutaSel[0];
+      if(id===origen){ limpiarRuta(); limpiarRutaClases(); return; } // deseleccionar
+      const linea=construirLinea(origen,id);
+      if(!linea){
+        logAccion('✋ Ruta inválida: debe ser en línea recta (misma fila o columna)',false);
+        return;
+      }
+      rutaSel=linea; pintarRuta();
+    }
+  }
+  Object.entries(cells).forEach(([id,cel])=>cel.addEventListener('click',()=>clickCelda(id)));
+
+  document.getElementById('btn-mapa').addEventListener('click',(e)=>{
+    modoRuta=!modoRuta;
+    ciudad.classList.toggle('modo-ruta',modoRuta);
+    e.target.classList.toggle('modo-ruta-activo',modoRuta);
+    e.target.textContent=modoRuta?'✓ Modo mapa activo (clic inicio → fin)':'📍 Marcar ruta en el mapa';
+    document.getElementById('ruta-hint').style.display=modoRuta?'block':'none';
+    document.getElementById('btn-limpiar-ruta').style.display=modoRuta?'block':'none';
+    if(!modoRuta){limpiarRuta();limpiarRutaClases();}
+  });
+  document.getElementById('btn-limpiar-ruta').addEventListener('click',()=>{limpiarRuta();limpiarRutaClases();document.getElementById('amb-vias').value='';});
+
+  // Ambulancia
+  document.getElementById('btn-amb').addEventListener('click',()=>{
+    const vias=document.getElementById('amb-vias').value.split(',').map(s=>s.trim()).filter(Boolean);
+    if(!vias.length){alert('Indica al menos una vía o márcala en el mapa');return;}
+    const t0=performance.now();
+    let okCount=0;
+    vias.forEach(v=>{ if(datos[v]){ prioridadHasta[v]=Date.now()+60000; datos[v].estado='PRIORIDAD'; renderCelda(v); okCount++; }});
+    nPrio++; setMetric('m-prioridades',nPrio);
+    const dt=(performance.now()-t0).toFixed(2);
+    logAccion(`🚑 PRIORIDAD (ola verde) en ${vias.join(' → ')} (${okCount} vías, ${dt} ms)`,okCount>0);
+  });
+
+  // Forzar semáforo
+  document.getElementById('btn-fz').addEventListener('click',()=>{
+    const id=fzInt.value, est=document.getElementById('fz-estado').value;
+    if(datos[id]){ datos[id].estado=(est==='ROJO')?'ROJO_MANUAL':'PRIORIDAD'; renderCelda(id); logAccion(`🚦 ${id} → ${est}`,true);}
+  });
+
+  // Falla de PC3
+  let fallaTimer=null;
+  document.getElementById('btn-falla').addEventListener('click',(e)=>{
+    if(pc3Activo){
+      pc3Activo=false;
+      document.getElementById('hb-led').className='hb-led off';
+      document.getElementById('hb-text').textContent='PC3 NO responde';
+      logAccion('⚠️ PC3 caído — analítica usa réplica en PC2',false);
+      e.target.textContent='Recuperar PC3';
+      e.target.classList.remove('danger'); e.target.style.background='var(--green)';
+    } else {
+      pc3Activo=true;
+      document.getElementById('hb-led').className='hb-led on';
+      document.getElementById('hb-text').textContent='PC3 activo';
+      logAccion('✅ PC3 recuperado — reanuda envío a BD principal',true);
+      e.target.textContent='Simular caída de PC3';
+      e.target.classList.add('danger'); e.target.style.background='';
+    }
+  });
+
+  // Velocidad según diseño del broker (multihilo = más throughput)
+  let intervalo=null;
+  function arrancar(){
+    if(intervalo) clearInterval(intervalo);
+    const modo=document.getElementById('modo-broker').value;
+    const periodo=(modo==='multihilo')?180:300;
+    intervalo=setInterval(tickSensor,periodo);
+  }
+  document.getElementById('modo-broker').addEventListener('change',arrancar);
+  arrancar();
+})();
+</script>
+</body>
+</html>

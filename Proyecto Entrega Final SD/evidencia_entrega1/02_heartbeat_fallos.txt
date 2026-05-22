@@ -1,0 +1,6 @@
+2026-04-09T12:47:29 | WARNING  | Analitica            | ⚠️  PC3 no responde desde hace 9.2s (timeout=9s) — usando réplica en PC2
+2026-04-09T12:49:17 | INFO     | Analitica            | ✅ PC3 recuperado — reanudando envío a BD principal
+2026-04-09T12:49:34 | WARNING  | Analitica            | ⚠️  PC3 no responde desde hace 11.0s (timeout=9s) — usando réplica en PC2
+2026-04-09T12:50:24 | INFO     | Analitica            | ✅ PC3 recuperado — reanudando envío a BD principal
+2026-04-09T13:12:15 | WARNING  | Analitica            | ⚠️  PC3 no responde desde hace 9.4s (timeout=9s) — usando réplica en PC2
+2026-04-09T13:26:42 | INFO     | Analitica            | ✅ PC3 recuperado — reanudando envío a BD principal
